@@ -1,17 +1,21 @@
 # first step parameters
-input_filepath: /HOME/GitHub/nlp-paper-implementation/glove/data/demo_data.pkl
+input_filepath: C:\Users\Administrator\GitHub\nlp-paper-implementation\glove\data\demo_data.pkl 
 vocab_size: 100000
 window_size: 10
 ## the number of paritions to divide cooccurence matrix in 
-num_vocab_partitions: 10
+num_partitions: 10
 ## h5py parameters
 chunk_size: 1000000
 
+# when used in first step, specify the output directory of cooccurrence entries
+# when used in second step, specify where to read cooccurrence entries from
+cooccurrence_dir: C:\Users\Administrator\GitHub\nlp-paper-implementation\glove\data
+
 # second step parameters
-cooccurrence_filepath: null
+output_filepath: C:\Users\Administrator\GitHub\nlp-paper-implementation\glove\data\model.pt
 ## training parameters
 batch_size: 32
-num_epochs: 50
+num_epochs: 20
 device: cpu
 learning_rate: 0.05
 ## glove paremeters

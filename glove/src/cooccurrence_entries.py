@@ -1,26 +1,29 @@
 from dataclasses import dataclass, field
+from collections import Counter
 import os
+import pickle
 
 import h5py
+import numpy as np
+from tqdm import tqdm
 
-from .vocabulary import Vocabulary
+from vectorizer import Vectorizer
 
 
 @dataclass
 class CooccurrenceEntries:
     vectorized_corpus: list
-    vocab: Vocabulary
+    vectorizer: Vectorizer
     
     @classmethod
-    def setup(cls, corpus, vocab):
-        vocab.shuffle()
+    def setup(cls, corpus, vectorizer):
         return cls(
-            vectorized_corpus=[vocab[token] for token in tqdm(corpus)],
-            vocab=vocab
+            vectorized_corpus=vectorizer.vectorize(corpus),
+            vectorizer=vectorizer
         )
     
     def validate_index(self, index, lower, upper):
-        is_unk = index == self.vocab.unk_token
+        is_unk = index == self.vectorizer.vocab.unk_token
         if lower < 0:
             return not is_unk
         return not is_unk and index >= lower and index <= upper
@@ -28,15 +31,15 @@ class CooccurrenceEntries:
     def build(
         self,
         window_size,
-        num_vocab_partitions,
+        num_partitions,
         chunk_size,
         output_directory="."
     ):
-        partition_step = len(self.vocab) // num_vocab_partitions
+        partition_step = len(self.vectorizer.vocab) // num_partitions
         split_points = [0]
-        while split_points[-1] + partition_step <= len(self.vocab):
+        while split_points[-1] + partition_step <= len(self.vectorizer.vocab):
             split_points.append(split_points[-1] + partition_step)
-        split_points[-1] = len(self.vocab)
+        split_points[-1] = len(self.vectorizer.vocab)
 
         for partition_id in tqdm(range(len(split_points) - 1)):
             index_lower = split_points[partition_id]
@@ -86,4 +89,4 @@ class CooccurrenceEntries:
         
         file.close()
         with open(os.path.join(output_directory, "vocab.pkl"), "wb") as file:
-            pickle.dump(self.vocab, file)
+            pickle.dump(self.vectorizer.vocab, file)

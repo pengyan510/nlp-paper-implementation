@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 
@@ -18,13 +19,13 @@ class GloVe(nn.Module):
         self.bias = nn.Parameter(
             torch.randn(
                 vocab_size,
-                dtype=torch.float64,
+                dtype=torch.float,
             )
         )
         self.bias_tilde = nn.Parameter(
             torch.randn(
                 vocab_size,
-                dtype=torch.float64,
+                dtype=torch.float,
             )
         )
         self.weighting_func = lambda x: (x / x_max).float_power(alpha).clamp(0, 1)
