@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import random
 import contextlib
 
@@ -25,12 +25,13 @@ class HDF5DataLoader:
     dataset_name: str
     batch_size: int
     device: str
+    dataset: h5py.Dataset = field(init=False)
 
-    def iter_batches(self, dataset):
-        chunks = list(dataset.iter_chunks())
+    def iter_batches(self):
+        chunks = list(self.dataset.iter_chunks())
         random.shuffle(chunks)
         for chunk in chunks:
-            chunked_dataset = dataset[chunk]
+            chunked_dataset = self.dataset[chunk]
             dataloader = torch.utils.data.DataLoader(
                 dataset=CooccurrenceDataset(
                     token_ids=torch.from_numpy(chunked_dataset[:,:2]).long(),
@@ -46,8 +47,7 @@ class HDF5DataLoader:
                 yield batch
 
     @contextlib.contextmanager
-    def generator(self):
-        file = h5py.File(self.filepath, "r")
-        dataset = file[self.dataset_name]
-        yield self.iter_batches(dataset)
-        file.close()
+    def open(self):
+        with h5py.File(self.filepath, "r") as file:
+            self.dataset = file[self.dataset_name]
+            yield

@@ -77,22 +77,22 @@ def train_glove(config):
         model.parameters(),
         lr=config.learning_rate
     )
-    with dataloader.generator() as batch_generator:
+    with dataloader.open():
         model.train()
         losses = []
         for epoch in tqdm(range(config.num_epochs)):
             epoch_loss = 0
-            for batch in tqdm(batch_generator):
+            for batch in tqdm(dataloader.iter_batches()):
                 loss = model(
                     batch[0][:, 0],
                     batch[0][:, 1],
                     batch[1]
                 )
-                epoch_loss += loss
+                epoch_loss += loss.detach().item()
                 loss.backward()
                 optimizer.step()
                 optimizer.zero_grad()
-            
+
             losses.append(epoch_loss)
             print(f"Epoch {epoch}: loss = {epoch_loss}")
             torch.save(model.state_dict(), config.output_filepath)
