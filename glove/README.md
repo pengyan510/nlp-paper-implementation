@@ -10,7 +10,7 @@ If you only want to do the first step, i.e. count the cooccurring pairs, you can
 ```
 python train.py --first-step-only 
 ```
-Later you can continue the second step with first step's result by calling
+Later you can do the second step by calling
 ```
 python train.py --second-step-only
 ```
