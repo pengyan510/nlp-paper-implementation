@@ -5,6 +5,7 @@ python train.py
 ```
 and it will do the full training and save the word vectors to disk.
 
+
 If you only want to do the first step, i.e. count the cooccurring pairs, you can run
 ```
 python train.py --first-step-only 
