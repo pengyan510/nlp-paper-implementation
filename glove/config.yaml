@@ -1,19 +1,23 @@
 # first step parameters
-input_filepath: C:\Users\Administrator\GitHub\nlp-paper-implementation\glove\data\demo_data.pkl 
+## path to the input file, should be a pickle file storing a list of words
+input_filepath:
+## number of tokens in the training vocabulary
 vocab_size: 100000
+## size of the context window
 window_size: 10
 ## the number of paritions to divide cooccurence matrix in 
 num_partitions: 10
-## h5py parameters
+## chunk size of h5py.Dataset
 chunk_size: 1000000
 
 # when used in first step, specify the output directory of cooccurrence entries
 # when used in second step, specify where to read cooccurrence entries from
-cooccurrence_dir: C:\Users\Administrator\GitHub\nlp-paper-implementation\glove\data
+cooccurrence_dir:
 
 # second step parameters
-output_filepath: C:\Users\Administrator\GitHub\nlp-paper-implementation\glove\data\model.pt
-## training parameters
+## output path for the trained word vectors 
+output_filepath:
+## pytorch training parameters
 batch_size: 32
 num_epochs: 20
 device: cpu

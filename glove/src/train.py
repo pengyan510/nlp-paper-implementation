@@ -18,12 +18,12 @@ from hdf5_dataloader import HDF5DataLoader
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--first_step_only",
+        "--first-step-only",
         help="only calculate the cooccurrence matrix",
         action="store_true"
     )
     parser.add_argument(
-        "--second_step_only",
+        "--second-step-only",
         help="train the word vectors given the cooccurrence matrix",
         action="store_true"
     )
